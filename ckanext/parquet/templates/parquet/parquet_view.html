@@ -1,0 +1,92 @@
+<div id="parquet-preview">
+    <span>
+        {{ _("Preparing your preview...") }}
+    </span>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/6.3.1/css/tabulator.min.css"
+    integrity="sha512-RYFH4FFdhD/FdA+OVEbFVqd5ifR+Dnx2M7eWcmkcMexlIoxNgm89ieeVyHYb8xChuYBtbrasMTlo02cLnidjtQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/6.3.1/css/tabulator_semanticui.min.css"
+    integrity="sha512-V5osaNojM1vXQvKtRIjCawiV39/632N1HTlfUnlBu35bY7CTbUbeubWOiQcWPuWxGrj+DDXh/Kl1qAILGA/8Og=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/6.3.1/js/tabulator.min.js"
+    integrity="sha512-8+qwMD/110YLl5T2bPupMbPMXlARhei2mSxerb/0UWZuvcg4NjG7FdxzuuvDs2rBr/KCNqhyBDe8W3ykKB1dzA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/hyparquet.bundle.js"></script>
+
+
+<script>
+    (async () => {
+        const hp = window.hyparquet;
+        const file = await hp.asyncBufferFromUrl({ url: 'https://hyperparam-public.s3.amazonaws.com/wiki-en-00000-of-00041.parquet' });
+        const metadata = await hp.parquetMetadataAsync(file);
+        const numRows = Number(metadata.num_rows);
+        const schema = hp.parquetSchema(metadata);
+        const columns = schema.children.map(formatColumn);
+        const pageSize = 25;
+
+        console.log(`Parquet file has ${numRows} rows`);
+
+        // Create Tabulator table with "ajax" pagination
+        const table = new Tabulator("#parquet-preview", {
+            layout: "fitData",
+            height: 630,
+            columns,
+            pagination: "remote",
+            sortMode: "remote",
+            paginationSize: pageSize,
+            paginationSizeSelector: [25, 50, 100],
+            ajaxURL: "/",
+            progressiveLoad: "scroll",  // optional, loads next page as user scrolls
+            progressiveLoadScrollMargin: 300,
+            ajaxRequestFunc: async (url, config, params) => {
+                console.log("Loading data with params:", params);
+
+                const page = params.page || 1;
+                const size = params.size || pageSize;
+                const rowStart = (page - 1) * size;
+                const rowEnd = rowStart + size;
+
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const rows = await hp.parquetReadObjects({
+                            file,
+                            rowStart,
+                            rowEnd
+                        });
+                        resolve(rows);
+                    } catch (error) {
+                        reject(error);
+                    }
+                });
+            }
+        });
+    })();
+
+    function formatColumn(col) {
+        return {
+            title: col.element.name,
+            field: col.element.name,
+            sorter: "string",
+            maxWidth: 200,
+            tooltip: true,
+            formatter: formatCellValue
+        }
+    }
+
+    function formatCellValue(cell) {
+        const value = cell.getValue();
+
+        if (typeof value === "object" && value !== null) {
+            return JSON.stringify(value); // convert object to string
+        }
+
+        return value;
+    }
+</script>
+
+{#
+{% asset 'parquet/parquet-js' %}
+{% asset 'parquet/parquet-css' %}
+#}

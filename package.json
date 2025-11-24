@@ -1,0 +1,21 @@
+{
+    "dependencies": {
+        "esbuild": "^0.27.0",
+        "hyparquet": "^1.21.0",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0"
+    },
+    "scripts": {
+        "build": "node build.mjs"
+    },
+    "name": "ckanext-parquet",
+    "version": "1.0.0",
+    "description": "[![Tests](https://github.com/Link Digital/ckanext-parquet/workflows/Tests/badge.svg?branch=main)](https://github.com/Link Digital/ckanext-parquet/actions)",
+    "main": "hyparquet.bundle.js",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "vite": "^7.2.4"
+    }
+}

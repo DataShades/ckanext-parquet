@@ -1,0 +1,14 @@
+# parquet-js:
+#   filter: rjsmin
+#   output: ckanext-parquet/%(version)s-parquet.js
+#   contents:
+#     - js/parquet.js
+#   extra:
+#     preload:
+#       - base/main
+
+# parquet-css:
+#   filter: cssrewrite
+#   output: ckanext-parquet/%(version)s-parquet.css
+#   contents:
+#     - css/parquet.css
