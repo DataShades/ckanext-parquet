@@ -19,7 +19,7 @@ keywords = [ "CKAN", "preview", "parquet", ]
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/Link Digital/ckanext-parquet"
+Homepage = "https://github.com/DataShades/ckanext-parquet"
 
 [project.entry-points."ckan.plugins"]
 parquet_view = "ckanext.parquet.plugin:ParquetPlugin"
