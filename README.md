@@ -1,5 +1,3 @@
-[![Tests](https://github.com/DataShades/ckanext-parquet/workflows/Tests/badge.svg?branch=main)](https://github.com/Link Digital/ckanext-parquet/actions)
-
 # ckanext-parquet
 
 A CKAN extension that adds a Parquet file viewer to CKAN.

@@ -6,6 +6,8 @@ import { sortableDataFrame } from "hightable";
 import { byteLengthFromUrl, parquetMetadataAsync } from "hyparquet";
 import { AsyncBufferFrom, asyncBufferFrom, parquetDataFrame } from "hyperparam";
 
+import Spinner from './assets/spinner.tsx';
+
 export default function App({ fileUrl }: { fileUrl: string }): ReactNode {
   const [error, setError] = useState<Error>();
   const [pageProps, setPageProps] = useState<PageProps>();
@@ -46,7 +48,7 @@ export default function App({ fileUrl }: { fileUrl: string }): ReactNode {
 
   return (
     <Layout error={error}>
-      {pageProps && <Page {...pageProps} />}
+      {pageProps ? <Page {...pageProps} /> : <div className="loader"><Spinner /> Loading...</div>}
     </Layout>
   );
 }

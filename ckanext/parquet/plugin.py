@@ -9,13 +9,12 @@ from ckanext.parquet.logic import schema
 
 class ParquetPlugin(p.SingletonPlugin):
     p.implements(p.IConfigurer)
-    p.implements(p.IResourceView)
+    p.implements(p.IResourceView, inherit=True)
 
     # IConfigurer
 
     def update_config(self, config_):
         tk.add_template_directory(config_, "templates")
-        tk.add_public_directory(config_, "public")
         tk.add_resource("assets", "parquet")
 
     # IResourceView
@@ -23,11 +22,11 @@ class ParquetPlugin(p.SingletonPlugin):
     def info(self):
         return {
             "name": "parquet_view",
-            "title": "Parquet File View",
+            "title": "Parquet View",
             "icon": "table",
             "schema": schema.get_preview_schema(),
             "iframed": False,
-            "default_title": "Parquet File View",
+            "default_title": "Parquet View",
             "default_description": "View Parquet files in a tabular format.",
         }
 
