@@ -2,10 +2,9 @@ import HighTable, { DataFrame } from 'hightable'
 import { FileMetaData } from 'hyparquet'
 import { Dropdown } from 'hyperparam'
 import { ReactNode, useState } from 'react'
-import ParquetLayout from './ParquetLayout.js'
 import ParquetMetadata from './ParquetMetadata.js'
 
-type Lens = 'table' | 'metadata' | 'layout'
+type Lens = 'table' | 'metadata'
 
 export interface PageProps {
   metadata: FileMetaData
@@ -24,21 +23,16 @@ export default function Page({ metadata, df, name, byteLength, setError }: PageP
   const [lens, setLens] = useState<Lens>('table')
 
   return <>
-    <div className='top-header'>
-      {name}
-    </div>
     <div className='view-header'>
       {byteLength !== undefined && <span title={byteLength.toLocaleString() + ' bytes'}>{formatFileSize(byteLength)}</span>}
       <span>{df.numRows.toLocaleString()} rows</span>
       <Dropdown label={lens}>
         <button onClick={() => { setLens('table') }}>Table</button>
         <button onClick={() => { setLens('metadata') }}>Metadata</button>
-        {byteLength && <button onClick={() => { setLens('layout') }}>Layout</button>}
       </Dropdown>
     </div>
-    {lens === 'table' && <HighTable cacheKey={name} data={df} onError={setError} className="hightable" />}
+    {lens === 'table' && <HighTable cacheKey={name} styled={true} data={df} onError={setError} className="parquet-hightable" />}
     {lens === 'metadata' && <ParquetMetadata metadata={metadata} />}
-    {lens === 'layout' && byteLength && <ParquetLayout byteLength={byteLength} metadata={metadata} />}
   </>
 }
 

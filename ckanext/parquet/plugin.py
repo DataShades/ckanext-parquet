@@ -26,7 +26,7 @@ class ParquetPlugin(p.SingletonPlugin):
             "title": "Parquet File View",
             "icon": "table",
             "schema": schema.get_preview_schema(),
-            "iframed": True,
+            "iframed": False,
             "default_title": "Parquet File View",
             "default_description": "View Parquet files in a tabular format.",
         }

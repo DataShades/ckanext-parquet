@@ -8,6 +8,7 @@ interface MetadataProps {
 
 /**
  * Renders the metadata of a parquet file as JSON.
+ *
  * @param {Object} props
  * @param {FileMetaData} props.metadata
  * @returns {ReactNode}

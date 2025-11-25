@@ -1,0 +1,4 @@
+.ckanext-datapreview #hyparquet-root .content-container,
+.ckanext-datapreview #hyparquet-root .content {
+    height: 700px;
+}
